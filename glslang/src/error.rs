@@ -4,17 +4,15 @@ use crate::shader::Target;
 use thiserror::Error;
 
 /// The error logs
-#[derive(Debug)]
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct GlslangErrorLog {
     pub log: String,
     pub debug_log: String,
 }
 
 impl GlslangErrorLog {
-    pub fn new(log: String, debug_log: String) -> Self {
-        Self {
-            log, debug_log
-        }
+    pub const fn new(log: String, debug_log: String) -> Self {
+        Self { log, debug_log }
     }
 }
 

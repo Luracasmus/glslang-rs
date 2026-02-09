@@ -191,11 +191,9 @@ impl<'a> Program<'a> {
             ))
         };
 
-        let string = CString::from(c_str)
+        CString::from(c_str)
             .into_string()
-            .expect("Expected glslang info log to be valid UTF-8");
-
-        string
+            .expect("Expected glslang info log to be valid UTF-8")
     }
 }
 
