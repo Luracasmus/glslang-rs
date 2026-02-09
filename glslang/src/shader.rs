@@ -14,7 +14,7 @@ use std::ffi::{CStr, CString, c_void};
 use std::ptr::NonNull;
 
 /// A handle to a shader in the glslang compiler.
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+#[derive(Debug, Hash, PartialEq, Eq)]
 pub struct Shader<'a> {
     pub(crate) handle: NonNull<sys::glslang_shader_t>,
     pub(crate) stage: ShaderStage,
