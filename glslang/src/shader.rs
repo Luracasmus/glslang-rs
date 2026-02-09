@@ -303,37 +303,37 @@ pub enum Target {
 impl Target {
     const fn env(&self) -> sys::glslang_client_t {
         match self {
-            Target::None(_) => sys::glslang_client_t::None,
-            Target::Vulkan { .. } => sys::glslang_client_t::Vulkan,
-            Target::OpenGL { .. } => sys::glslang_client_t::OpenGL,
+            Self::None(_) => sys::glslang_client_t::None,
+            Self::Vulkan { .. } => sys::glslang_client_t::Vulkan,
+            Self::OpenGL { .. } => sys::glslang_client_t::OpenGL,
         }
     }
 
     const fn target_spirv(&self) -> sys::glslang_target_language_t {
         match self {
-            Target::None(spirv_version) | Target::OpenGL { spirv_version, .. } => {
+            Self::None(spirv_version) | Self::OpenGL { spirv_version, .. } => {
                 if spirv_version.is_some() {
                     sys::glslang_target_language_t::SPIRV
                 } else {
                     sys::glslang_target_language_t::None
                 }
             }
-            Target::Vulkan { .. } => sys::glslang_target_language_t::SPIRV,
+            Self::Vulkan { .. } => sys::glslang_target_language_t::SPIRV,
         }
     }
 
     const fn env_version(&self) -> sys::glslang_target_client_version_t {
         match self {
             // Doesn't matter.
-            Target::None(_) => sys::glslang_target_client_version_t::OpenGL450,
-            Target::Vulkan { version, .. } => match version {
+            Self::None(_) => sys::glslang_target_client_version_t::OpenGL450,
+            Self::Vulkan { version, .. } => match version {
                 VulkanVersion::Vulkan1_0 => sys::glslang_target_client_version_t::Vulkan1_0,
                 VulkanVersion::Vulkan1_1 => sys::glslang_target_client_version_t::Vulkan1_1,
                 VulkanVersion::Vulkan1_2 => sys::glslang_target_client_version_t::Vulkan1_2,
                 VulkanVersion::Vulkan1_3 => sys::glslang_target_client_version_t::Vulkan1_3,
                 VulkanVersion::Vulkan1_4 => sys::glslang_target_client_version_t::Vulkan1_4,
             },
-            Target::OpenGL { version, .. } => match version {
+            Self::OpenGL { version, .. } => match version {
                 OpenGlVersion::OpenGL4_5 => sys::glslang_target_client_version_t::OpenGL450,
             },
         }
@@ -342,10 +342,10 @@ impl Target {
     fn spirv_version(&self) -> sys::glslang_target_language_version_t {
         match self {
             // Doesn't matter.
-            Target::None(spirv_version) | Target::OpenGL { spirv_version, .. } => {
+            Self::None(spirv_version) | Self::OpenGL { spirv_version, .. } => {
                 spirv_version.unwrap_or(sys::glslang_target_language_version_t::SPIRV1_0)
             }
-            Target::Vulkan { spirv_version, .. } => *spirv_version,
+            Self::Vulkan { spirv_version, .. } => *spirv_version,
         }
     }
 
@@ -385,7 +385,7 @@ impl Target {
         }
 
         match self {
-            Target::None(spirv_version) => {
+            Self::None(spirv_version) => {
                 if spirv_version.is_some() && profile == GlslProfile::Compatibility {
                     return Err(GlslangError::InvalidProfile(
                         *self,
@@ -394,7 +394,7 @@ impl Target {
                     ));
                 }
             }
-            Target::Vulkan { .. } => {
+            Self::Vulkan { .. } => {
                 if version < 140 {
                     // Desktop shaders for Vulkan SPIR-V require version 140
                     return Err(GlslangError::InvalidProfile(*self, version, profile));
@@ -409,7 +409,7 @@ impl Target {
                     ));
                 }
             }
-            Target::OpenGL { spirv_version, .. } => {
+            Self::OpenGL { spirv_version, .. } => {
                 if spirv_version.is_some() {
                     // OpenGL SPIRV needs 330+
                     if version < 330 {
@@ -462,7 +462,7 @@ bitflags! {
 
 impl From<ShaderMessage> for sys::glslang_messages_t {
     fn from(value: ShaderMessage) -> Self {
-        sys::glslang_messages_t(value.bits())
+        Self(value.bits())
     }
 }
 

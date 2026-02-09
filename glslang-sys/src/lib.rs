@@ -24,6 +24,6 @@ impl crate::bindings::glslang_limits_s {
 
 impl Default for crate::bindings::glslang_limits_s {
     fn default() -> Self {
-        crate::bindings::glslang_limits_s::default()
+        Self::default()
     }
 }
